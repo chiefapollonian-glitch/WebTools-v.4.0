@@ -161,6 +161,22 @@
     </script>
 
     <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('Service Worker registered'))
+          .catch(err => console.error('Service Worker error:', err));
+      }
+    </script>
+
+    <script>
+      navigator.serviceWorker.ready.then(function(reg) {
+        if (!crossOriginIsolated && !navigator.serviceWorker.controller) {
+          window.location.reload();
+        }
+      });
+    </script>
+
+    <script>
         // Audio Converter script
         (async () => {
             const status = document.getElementById('status');
