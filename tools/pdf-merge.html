@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PDF Merger</title>
+<link rel="icon" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/styles.css">
+<!-- pdf-lib via reliable jsDelivr CDN -->
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2381000819704004"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+  <header class="site"><a class="brand" href="../index.html">← Utility Kit</a></header>
+
+  <h1 style="font-size:var(--h2-size)">PDF Merger</h1>
+  <p class="small">Merge PDFs locally. Nothing leaves your device.</p>
+
+  <div class="section">
+    <label for="files">Select PDFs (order matters)</label>
+    <input type="file" id="files" accept="application/pdf" multiple>
+    <div class="stack" style="margin-top:10px">
+      <button id="merge">Merge</button>
+      <a id="dl" class="button secondary hidden" download="merged.pdf">Download</a>
+    </div>
+    <p id="log" class="small" style="margin-top:8px;color:var(--muted)"></p>
+  </div>
+
+  <footer class="site"><a href="../index.html">← Back to tools</a></footer>
+</div>
+
+<script>
+window.addEventListener('load', () => {
+  // Check if pdf-lib loaded from CDN
+  if (typeof PDFLib === 'undefined') {
+    console.error('pdf-lib failed to load from CDN.');
+    document.getElementById('log').textContent = 'Error: PDF library failed to load. Please refresh and try again.';
+    return;
+  }
+  console.log('pdf-lib loaded successfully.');
+
+  const { PDFDocument } = PDFLib;
+  const mergeBtn = document.getElementById('merge');
+  const filesInput = document.getElementById('files');
+  const dl = document.getElementById('dl');
+  const log = document.getElementById('log');
+
+  mergeBtn.onclick = async () => {
+    const files = [...filesInput.files];
+    if (!files.length) return alert('Select PDFs');
+    if (files.length === 1) return alert('Select at least 2 PDFs to merge');
+
+    mergeBtn.disabled = true; // Prevent spam clicks
+    log.textContent = 'Merging PDFs... (local processing)';
+
+    try {
+      const out = await PDFDocument.create();
+      for (let i = 0; i < files.length; i++) {
+        log.textContent = `Merging PDF ${i + 1}/${files.length}...`;
+        const bytes = new Uint8Array(await files[i].arrayBuffer());
+        const src = await PDFDocument.load(bytes);
+        const pages = await out.copyPages(src, src.getPageIndices());
+        pages.forEach(p => out.addPage(p));
+      }
+
+      const pdfBytes = await out.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      dl.href = URL.createObjectURL(blob);
+      dl.classList.remove('hidden');
+      log.textContent = 'Done! Download ready.';
+    } catch (error) {
+      console.error('Merge error:', error);
+      log.textContent = `Error: ${error.message}. Try smaller files or refresh.`;
+      alert('Merge failed. Check file sizes or refresh the page.');
+    } finally {
+      mergeBtn.disabled = false;
+    }
+  };
+});
+</script>
+</body>
+</html>

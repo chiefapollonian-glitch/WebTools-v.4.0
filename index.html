@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webtools by apollonianeye.uk — lightweight Utility Kit</title>
+    <meta name="description" content="Simple, private, in-browser tools. No uploads. No logins.">
+    <meta name="google-adsense-account" content="ca-pub-2381000819704004">
+    <link rel="icon" href="assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/theme.css">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f9f9f9;
+            --border-color: #e0e0e0;
+            --header-bg: #ffffff;
+            --badge-bg: #f0f0f0;
+            --btn-bg: #007bff;
+            --btn-hover: #0056b3;
+            --hero-text: #333333;
+            --hero-bg: #ffffff;
+        }
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --card-bg: #2a2a2a;
+            --border-color: #404040;
+            --header-bg: #2a2a2a;
+            --badge-bg: #404040;
+            --btn-bg: #0d6efd;
+            --btn-hover: #0b5ed7;
+            --hero-text: #f0f0f0;
+            --hero-bg: #1a1a1a;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .hero {
+            background-color: var(--hero-bg);
+            color: var(--hero-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .hero h1, .hero p {
+            color: var(--hero-text);
+            transition: color 0.3s ease;
+        }
+        .hero h1 {
+            background: none !important; /* Override any existing background */
+            line-height: 1.2; /* Improve readability for tagline */
+            font-weight: 700;
+        }
+        .hero p {
+            line-height: 1.5; /* Better spacing for tagline */
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .badge {
+            background-color: var(--badge-bg);
+            color: var(--text-color);
+        }
+        .btn {
+            background-color: var(--btn-bg);
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: var(--btn-hover);
+        }
+        header.site {
+            background-color: var(--header-bg);
+            border-bottom: none; /* Remove visible box border */
+            transition: background-color 0.3s ease;
+        }
+        .brand {
+            color: var(--text-color); /* Ensure byline text inverts with theme */
+            transition: color 0.3s ease;
+        }
+        /* Logo text inversion (targets SVG text inside header) */
+        header [data-theme="light"] .logo-text {
+            fill: #1a202c !important; /* Dark text on light */
+        }
+        header [data-theme="dark"] .logo-text {
+            fill: #F3F6FA !important; /* Light text on dark */
+        }
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+            border-radius: 50%;
+            padding: 5px;
+        }
+        #theme-toggle:hover {
+            background-color: var(--badge-bg);
+        }
+        .audio-warning { 
+            background: #ffeb3b;
+        }
+        [data-theme="dark"] .audio-warning {
+            background: #ff9800; color: #000000; border-left-color: #f57c00;
+        }
+
+        /* NEW: On small screens, place the byline under the logo */
+        @media (max-width: 640px) {
+            header.site {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            header.site .brand {
+                margin-left: 0;
+                margin-top: 6px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="container">
+        <header class="site">
+            <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <img class="logo" src="assets/logo.svg" alt="Utility Tools logo" style="width: 250px; height: auto;">
+            <div class="brand">by www.apollonianeye.uk</div>
+        </header>
+
+        <section class="hero">
+            <h1>in a world of despicable data-vampires and scam-shillers,<br>this page offers simple, lightweight tools for modern online living</h1>
+            <p>No logins. No popups. <strong>All processing in your browser</strong> — files never leave your device.</p>
+            <div class="trust">
+                <span class="badge">Private</span>
+                <span class="badge">Fast</span>
+                <span class="badge">Free</span>
+            </div>
+        </section>
+
+        <section>
+            <div class="grid">
+                <article class="card">
+                    <h3>Small Caps Generator</h3>
+                    <p>Convert text to Unicode small caps. Copy-ready.</p>
+                    <a class="btn" href="tools/small-caps.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>Gothic / Fraktur Text</h3>
+                    <p>Convert text to Unicode Fraktur style.</p>
+                    <a class="btn" href="tools/gothic-fraktur.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>Typewriter / Monospace</h3>
+                    <p>Unicode monospace letters & digits.</p>
+                    <a class="btn" href="tools/typewriter.html">Open tool</a>
+                </article>
+
+                <article class="card">
+    <h3>Spanish Accents Keyboard</h3>
+    <p>Quick accents with Ctrl+Alt + a/e/i/o/u/n/? → á/é/í/ó/ú/ñ/¿.</p>
+    <a class="btn" href="tools/spanish-keyboard.html">Open tool</a>
+</article>
+
+                <article class="card">
+    <h3>Russian/Cyrillic Keyboard</h3>
+    <p>Romanized to Cyrillic transliteration (e.g., privet → привет).</p>
+    <a class="btn" href="tools/russian-cyrillic-keyboard.html">Open tool</a>
+</article>
+
+                           <article class="card">
+    <h3>Greek Keyboard</h3>
+    <p>Romanized to Greek transliteration.</p>
+    <a class="btn" href="tools/greek-keyboard.html">Open tool</a>
+</article>
+                
+                <article class="card">
+                    <h3>Image Converter</h3>
+                    <p>PNG ↔ JPG ↔ WebP with quality control.</p>
+                    <a class="btn" href="tools/images-convert.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>PDF Merger</h3>
+                    <p>Combine multiple PDFs with a click.</p>
+                    <a class="btn" href="tools/pdf-merge.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>Image Resizer</h3>
+                    <p>Resize with aspect lock, smooth or pixel-art.</p>
+                    <a class="btn" href="tools/image-resize.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>Vectorize (SVG) -- BETA/experimental</h3>
+                    <p>Turn logos/icons into SVG — no upload.</p>
+                    <a class="btn" href="tools/image-vectorize.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>Image Upscaler</h3>
+                    <p>2× / 4× upscaling, smooth or pixel-art.</p>
+                    <a class="btn" href="tools/image-upscale.html">Open tool</a>
+                </article>
+
+                <article class="card">
+                    <h3>CSV ↔ JSON</h3>
+                    <p>Convert both ways, quotes handled.</p>
+                    <a class="btn" href="tools/csv-json.html">Open tool</a>
+                </article>
+
+                <!-- Audio Warning Note -->
+                <div class="audio-warning">
+                    NOTE: The audio tools below are temporarily unavailable due to a transition from external CDN JavaScripts. We're hosting them locally for better security and reliability—back soon!
+                </div>
+
+                <article class="card">
+                    <h3>Audio Denoise</h3>
+                    <p>Reduce steady hiss on audio or video.</p>
+                    <a class="btn" href="tools/audio-denoise.html">(coming soon)</a>
+                </article>
+                
+                <article class="card">
+                    <h3>Audio Trim</h3>
+                    <p>Cut a clip by start + duration. Local only.</p>
+                    <a class="btn" href="tools/audio-trim.html">(coming soon)</a>
+                </article>
+
+                <article class="card">
+                    <h3>Audio Converter</h3>
+                    <p>MP3/WAV/FLAC — all in your browser.</p>
+                    <a class="btn" href="tools/audio-convert.html">(coming soon)</a>
+                </article>
+
+                <article class="card">
+                    <h3>Video → Audio</h3>
+                    <p>Extract audio as MP3, WAV, M4A or OGG.</p>
+                    <a class="btn" href="tools/video-to-audio.html">(coming soon)</a>
+                </article>
+
+                <article class="card">
+                    <h3>Video Converter</h3>
+                    <p>WebM (VP9/Opus) or MP4 (if supported).</p>
+                    <a class="btn" href="tools/video-convert.html">(coming soon)</a>
+                </article>
+
+            </div>
+        </section>
+
+        <footer class="site">
+            <div>
+                © <span id="y"></span> WebTools by www.apollonianeye.uk 
+                <span class="small">Made for humans, not marketing bots.</span><br>
+                <a href="about.html">About</a> · 
+                <a href="contact.html">Contact</a> · 
+                <a href="privacy.html">Privacy</a><br><br>
+
+                <!-- New button -->
+                <a class="btn" href="https://www.apollonianeye.uk" target="_blank" rel="noopener">
+                    Visit ApollonianEye.uk  |  The Apollonian Eye Ltd.  |  Web Media
+                </a>
+                <p class="small" style="margin-top:10px;">
+© 2025 The Apollonian Eye Ltd. | Registered in England & Wales.  
+</p>
+
+            </div>
+        </footer>
+
+        <!-- Bottom AdSense block needs slot number to be added later -->
+        <section style="margin:30px 0; text-align:center;">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-2381000819704004"
+                data-ad-slot="YOUR_SLOT_ID"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <script>
+            document.getElementById('y').textContent = new Date().getFullYear();
+        </script>
+
+        <script>
+            // Theme toggle (site-wide via localStorage)
+            document.addEventListener('DOMContentLoaded', () => {
+                const toggle = document.getElementById('theme-toggle');
+                const html = document.documentElement;
+
+                // Check for saved theme preference or OS preference
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    html.setAttribute('data-theme', 'dark');
+                    if (toggle) toggle.textContent = '☼';
+                } else {
+                    html.setAttribute('data-theme', 'light');
+                    if (toggle) toggle.textContent = '☾';
+                }
+
+                if (toggle) {
+                    toggle.addEventListener('click', () => {
+                        const currentTheme = html.getAttribute('data-theme');
+                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                        html.setAttribute('data-theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                        toggle.textContent = newTheme === 'dark' ? '☼' : '☾';
+                    });
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
