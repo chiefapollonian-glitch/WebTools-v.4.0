@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Converter - WebTools by apollonianeye.uk</title>
+    <meta name="description" content="Convert video formats in your browser. No uploads. Private and fast.">
+    <link rel="icon" href="../assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/theme.css">
+    <link rel="stylesheet" href="../assets/styles.css">
+    <script src="../vendor/ffmpeg/ffmpeg.min.js"></script>
+    <style>
+        /* Inline styles from index, adapted for tool page */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f9f9f9;
+            --border-color: #e0e0e0;
+            --header-bg: #ffffff;
+            --badge-bg: #f0f0f0;
+            --btn-bg: #007bff;
+            --btn-hover: #0056b3;
+            --hero-text: #333333;
+            --hero-bg: #ffffff;
+        }
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --card-bg: #2a2a2a;
+            --border-color: #404040;
+            --header-bg: #2a2a2a;
+            --badge-bg: #404040;
+            --btn-bg: #0d6efd;
+            --btn-hover: #0b5ed7;
+            --hero-text: #f0f0f0;
+            --hero-bg: #1a1a1a;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .btn {
+            background-color: var(--btn-bg);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: var(--btn-hover);
+        }
+        #status {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-color);
+        }
+        #progress {
+            width: 100%;
+            height: 20px;
+            margin: 10px 0;
+        }
+        input[type="file"], select {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+        header.site {
+            background-color: var(--header-bg);
+            transition: background-color 0.3s ease;
+            position: relative;
+            padding: 10px;
+        }
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+        /* Logo text inversion */
+        html[data-theme="light"] .logo-text {
+            fill: #1a202c !important;
+        }
+        html[data-theme="dark"] .logo-text {
+            fill: #F3F6FA !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site">
+            <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <!-- Inlined SVG for logo -->
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40" style="width: 200px; height: auto;" aria-label="WebTools Logo">
+                <ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke="#E0446A" stroke-width="3"/>
+                <circle cx="20" cy="20" r="5" fill="#E0446A"/>
+                <text class="logo-text" x="45" y="26" font-family="Inter, sans-serif" font-size="20" font-weight="700">
+                    WebTools
+                </text>
+            </svg>
+            <a href="../index.html" style="margin-left: 20px;">Back to Home</a>
+        </header>
+
+        <section class="card">
+            <h1>Video Converter</h1>
+            <p>Convert your video to WebM (VP9/Opus) or MP4 (if supported). All processing happens in your browser—no data leaves your device.</p>
+            <input type="file" id="videoFile" accept="video/*">
+            <label for="outputFormat">Output Format:</label>
+            <select id="outputFormat">
+                <option value="webm">WebM (VP9/Opus)</option>
+                <option value="mp4">MP4</option>
+            </select>
+            <button id="convertButton" class="btn" disabled>Convert Video</button>
+            <div id="status">In-browser script loading... please wait.</div>
+            <progress id="progress" value="0" max="100" style="display: none;"></progress>
+            <a id="downloadLink" style="display: none;" class="btn">Download Converted Video</a>
+        </section>
+    </div>
+
+    <script>
+        // Theme toggle script (adapted from index)
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                html.setAttribute('data-theme', 'dark');
+                toggle.textContent = '☼';
+            } else {
+                html.setAttribute('data-theme', 'light');
+                toggle.textContent = '☾';
+            }
+
+            toggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                toggle.textContent = newTheme === 'dark' ? '☼' : '☾';
+            });
+        });
+    </script>
+
+    <script>
+        // Video Converter script
+        (async () => {
+            const status = document.getElementById('status');
+            const convertButton = document.getElementById('convertButton');
+            const videoFileInput = document.getElementById('videoFile');
+            const outputFormatSelect = document.getElementById('outputFormat');
+            const progress = document.getElementById('progress');
+            const downloadLink = document.getElementById('downloadLink');
+
+            status.textContent = 'Loading FFmpeg in-browser... please wait.';
+
+            const { createFFmpeg, fetchFile } = FFmpeg;
+            const ffmpeg = createFFmpeg({
+                log: true,
+                corePath: '../vendor/ffmpeg/ffmpeg-core.min.js',
+                workerPath: '../vendor/ffmpeg/ffmpeg-core.worker.min.js',
+            });
+
+            try {
+                await ffmpeg.load();
+                status.textContent = 'Ready! Select a video file.';
+                convertButton.disabled = false;
+            } catch (error) {
+                status.textContent = 'Error loading FFmpeg: ' + error.message;
+                return;
+            }
+
+            let fileExtension = '';
+
+            // Use native progress for v0.10.0+
+            ffmpeg.setProgress(({ ratio }) => {
+                progress.value = Math.min(ratio * 100, 100);
+            });
+
+            videoFileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                fileExtension = file.name.split('.').pop().toLowerCase();
+                status.textContent = `Video loaded. Format: ${fileExtension.toUpperCase()}. Choose output and convert.`;
+            });
+
+            convertButton.addEventListener('click', async () => {
+                const file = videoFileInput.files[0];
+                if (!file) {
+                    status.textContent = 'Please select a video file first.';
+                    return;
+                }
+
+                const outputFormat = outputFormatSelect.value;
+
+                if (outputFormat === fileExtension) {
+                    status.textContent = 'Input and output formats are the same—no conversion needed.';
+                    return;
+                }
+
+                status.textContent = 'Converting video...';
+                convertButton.disabled = true;
+                progress.style.display = 'block';
+                progress.value = 0;
+                downloadLink.style.display = 'none';
+
+                try {
+                    const data = await fetchFile(file);
+                    ffmpeg.FS('writeFile', `input.${fileExtension}`, data);
+
+                    let args = ['-i', `input.${fileExtension}`];
+                    if (outputFormat === 'webm') {
+                        args.push('-c:v', 'vp9', '-c:a', 'opus', `output.${outputFormat}`);
+                    } else {  // MP4
+                        args.push('-c:v', 'libx264', '-c:a', 'aac', `output.${outputFormat}`);
+                    }
+
+                    await ffmpeg.run(...args);
+
+                    const outData = ffmpeg.FS('readFile', `output.${outputFormat}`);
+                    const blob = new Blob([outData.buffer], { type: `video/${outputFormat}` });
+                    downloadLink.href = URL.createObjectURL(blob);
+                    downloadLink.download = `converted.${outputFormat}`;
+                    downloadLink.style.display = 'block';
+
+                    status.textContent = 'Conversion complete!';
+                } catch (error) {
+                    status.textContent = 'Error during conversion: ' + error.message;
+                } finally {
+                    convertButton.disabled = false;
+                    progress.style.display = 'none';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
