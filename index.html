@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webtools by apollonianeye.uk — lightweight Utility Kit</title>
+    <title>WebTools by apollonianeye.uk — lightweight Utility Kit</title>
     <meta name="description" content="Simple, private, in-browser tools. No uploads. No logins.">
     <meta name="google-adsense-account" content="ca-pub-2381000819704004">
     <link rel="icon" href="assets/favicon.svg">
@@ -84,10 +84,10 @@
             transition: color 0.3s ease;
         }
         /* Logo text inversion (targets SVG text inside header) */
-        header [data-theme="light"] .logo-text {
+        html[data-theme="light"] .logo-text {
             fill: #1a202c !important; /* Dark text on light */
         }
-        header [data-theme="dark"] .logo-text {
+        html[data-theme="dark"] .logo-text {
             fill: #F3F6FA !important; /* Light text on dark */
         }
         #theme-toggle {
@@ -128,11 +128,20 @@
         }
     </style>
 </head>
-<body data-theme="light">
+<body>  <!-- Removed hard-coded data-theme="light" -->
     <div class="container">
         <header class="site">
             <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
-            <img class="logo" src="assets/logo.svg" alt="Utility Tools logo" style="width: 250px; height: auto;">
+            <!-- Inlined SVG for CSS theming -->
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40" style="width: 250px; height: auto;" aria-label="WebTools Logo">
+                <!-- Eye mark – keep it pink, doesn't flip -->
+                <ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke="#E0446A" stroke-width="3"/>
+                <circle cx="20" cy="20" r="5" fill="#E0446A"/>
+                <!-- Wordmark – no fill here, so CSS can control it -->
+                <text class="logo-text" x="45" y="26" font-family="Inter, sans-serif" font-size="20" font-weight="700">
+                    WebTools
+                </text>
+            </svg>
             <div class="brand">by www.apollonianeye.uk</div>
         </header>
 
@@ -167,22 +176,22 @@
                 </article>
 
                 <article class="card">
-    <h3>Spanish Accents Keyboard</h3>
-    <p>Quick accents with Ctrl+Alt + a/e/i/o/u/n/? → á/é/í/ó/ú/ñ/¿.</p>
-    <a class="btn" href="tools/spanish-keyboard.html">Open tool</a>
-</article>
+                    <h3>Spanish Accents Keyboard</h3>
+                    <p>Quick accents with Ctrl+Alt + a/e/i/o/u/n/? → á/é/í/ó/ú/ñ/¿.</p>
+                    <a class="btn" href="tools/spanish-keyboard.html">Open tool</a>
+                </article>
 
                 <article class="card">
-    <h3>Russian/Cyrillic Keyboard</h3>
-    <p>Romanized to Cyrillic transliteration (e.g., privet → привет).</p>
-    <a class="btn" href="tools/russian-cyrillic-keyboard.html">Open tool</a>
-</article>
+                    <h3>Russian/Cyrillic Keyboard</h3>
+                    <p>Romanized to Cyrillic transliteration (e.g., privet → привет).</p>
+                    <a class="btn" href="tools/russian-cyrillic-keyboard.html">Open tool</a>
+                </article>
 
-                           <article class="card">
-    <h3>Greek Keyboard</h3>
-    <p>Romanized to Greek transliteration.</p>
-    <a class="btn" href="tools/greek-keyboard.html">Open tool</a>
-</article>
+                <article class="card">
+                    <h3>Greek Keyboard</h3>
+                    <p>Romanized to Greek transliteration.</p>
+                    <a class="btn" href="tools/greek-keyboard.html">Open tool</a>
+                </article>
                 
                 <article class="card">
                     <h3>Image Converter</h3>
@@ -220,39 +229,36 @@
                     <a class="btn" href="tools/csv-json.html">Open tool</a>
                 </article>
 
-                <!-- Audio Warning Note -->
-                <div class="audio-warning">
-                    NOTE: The audio tools below are temporarily unavailable due to a transition from external CDN JavaScripts. We're hosting them locally for better security and reliability—back soon!
-                </div>
+                <!-- Removed audio-warning; assuming tools are ready with local FFmpeg -->
 
                 <article class="card">
                     <h3>Audio Denoise</h3>
                     <p>Reduce steady hiss on audio or video.</p>
-                    <a class="btn" href="tools/audio-denoise.html">(coming soon)</a>
+                    <a class="btn" href="tools/audio-denoise.html">Open tool</a>
                 </article>
                 
                 <article class="card">
                     <h3>Audio Trim</h3>
                     <p>Cut a clip by start + duration. Local only.</p>
-                    <a class="btn" href="tools/audio-trim.html">(coming soon)</a>
+                    <a class="btn" href="tools/audio-trim.html">Open tool</a>
                 </article>
 
                 <article class="card">
                     <h3>Audio Converter</h3>
                     <p>MP3/WAV/FLAC — all in your browser.</p>
-                    <a class="btn" href="tools/audio-convert.html">(coming soon)</a>
+                    <a class="btn" href="tools/audio-convert.html">Open tool</a>
                 </article>
 
                 <article class="card">
                     <h3>Video → Audio</h3>
                     <p>Extract audio as MP3, WAV, M4A or OGG.</p>
-                    <a class="btn" href="tools/video-to-audio.html">(coming soon)</a>
+                    <a class="btn" href="tools/video-to-audio.html">Open tool</a>
                 </article>
 
                 <article class="card">
                     <h3>Video Converter</h3>
                     <p>WebM (VP9/Opus) or MP4 (if supported).</p>
-                    <a class="btn" href="tools/video-convert.html">(coming soon)</a>
+                    <a class="btn" href="tools/video-convert.html">Open tool</a>
                 </article>
 
             </div>
@@ -326,9 +332,3 @@
     </div>
 </body>
 </html>
-
-
-
-
-
-
